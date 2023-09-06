@@ -2,9 +2,10 @@
 
 namespace Goldfinch\Illuminate;
 
-use SilverStripe\Core\Environment;
 use Illuminate\Validation\Factory;
+use SilverStripe\Core\Environment;
 use Illuminate\Container\Container;
+use SilverStripe\Control\Controller;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator;
@@ -31,6 +32,18 @@ class Validator
         self::initDBCapsule();
 
         return self::$validator->make($data, $rules, $messages, $attributes);
+    }
+
+    public static function validate(array $data, array $rules, array $messages = [], array $attributes = [])
+    {
+        $validator = self::make($data, $rules, $messages, $attributes);
+
+        if ($validator->fails())
+        {
+            return Controller::curr()->httpError(422, json_encode($validator->errors()->messages()));
+        }
+
+        return $validator;
     }
 
     protected static function initValidator()

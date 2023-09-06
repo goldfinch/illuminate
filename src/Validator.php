@@ -18,24 +18,30 @@ class Validator
      *
      * @var Factory
      */
-    private $validator;
+    private static $validator;
 
-    /**
-     * Get the validation factory instance.
-     *
-     * @return \Illuminate\Validation\Factory
-     */
-    public function getValidator()
+    protected function __construct()
     {
-        return $this->validator;
+        //
     }
 
-    public function __construct()
+    public static function make(array $data, array $rules, array $messages = [], array $attributes = [])
+    {
+        self::initValidator();
+        self::initDBCapsule();
+
+        return self::$validator->make($data, $rules, $messages, $attributes);
+    }
+
+    protected static function initValidator()
     {
         $loader = new FileLoader(new Filesystem(), BASE_PATH . '/vendor/illuminate/translation/lang');
         $translator = new Translator($loader, 'en');
-        $this->validator = new Factory($translator, new Container());
+        self::$validator = new Factory($translator, new Container());
+    }
 
+    protected static function initDBCapsule()
+    {
         $db = new Manager;
 
         $db->addConnection([
@@ -48,6 +54,6 @@ class Validator
             // 'unix_socket' => '',
         ]);
 
-        $this->validator->setPresenceVerifier(new DatabasePresenceVerifier($db->getDatabaseManager()));
+        self::$validator->setPresenceVerifier(new DatabasePresenceVerifier($db->getDatabaseManager()));
     }
 }

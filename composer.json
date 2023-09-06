@@ -21,10 +21,7 @@
     "autoload": {
         "psr-4": {
             "Goldfinch\\Illuminate\\": "src/"
-        },
-        "files": [
-            "helpers.php"
-        ]
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

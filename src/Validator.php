@@ -26,21 +26,31 @@ class Validator
         //
     }
 
-    public static function make(array $data, array $rules, array $messages = [], array $attributes = [])
-    {
+    public static function make(
+        array $data,
+        array $rules,
+        array $messages = [],
+        array $attributes = [],
+    ) {
         self::initValidator();
         self::initDBCapsule();
 
         return self::$validator->make($data, $rules, $messages, $attributes);
     }
 
-    public static function validate(array $data, array $rules, array $messages = [], array $attributes = [])
-    {
+    public static function validate(
+        array $data,
+        array $rules,
+        array $messages = [],
+        array $attributes = [],
+    ) {
         $validator = self::make($data, $rules, $messages, $attributes);
 
-        if ($validator->fails())
-        {
-            return Controller::curr()->httpError(422, json_encode($validator->errors()->messages()));
+        if ($validator->fails()) {
+            return Controller::curr()->httpError(
+                422,
+                json_encode($validator->errors()->messages()),
+            );
         }
 
         return $validator;
@@ -48,25 +58,30 @@ class Validator
 
     protected static function initValidator()
     {
-        $loader = new FileLoader(new Filesystem(), BASE_PATH . '/vendor/illuminate/translation/lang');
+        $loader = new FileLoader(
+            new Filesystem(),
+            BASE_PATH . '/vendor/illuminate/translation/lang',
+        );
         $translator = new Translator($loader, 'en');
         self::$validator = new Factory($translator, new Container());
     }
 
     protected static function initDBCapsule()
     {
-        $db = new Manager;
+        $db = new Manager();
 
         $db->addConnection([
             'driver' => 'mysql',
-            'host'      => Environment::getEnv('SS_DATABASE_SERVER'),
-            'database'  => Environment::getEnv('SS_DATABASE_NAME'),
-            'username'  => Environment::getEnv('SS_DATABASE_USERNAME'),
-            'password'  => Environment::getEnv('SS_DATABASE_PASSWORD'),
-            'charset'   => 'utf8',
+            'host' => Environment::getEnv('SS_DATABASE_SERVER'),
+            'database' => Environment::getEnv('SS_DATABASE_NAME'),
+            'username' => Environment::getEnv('SS_DATABASE_USERNAME'),
+            'password' => Environment::getEnv('SS_DATABASE_PASSWORD'),
+            'charset' => 'utf8',
             // 'unix_socket' => '',
         ]);
 
-        self::$validator->setPresenceVerifier(new DatabasePresenceVerifier($db->getDatabaseManager()));
+        self::$validator->setPresenceVerifier(
+            new DatabasePresenceVerifier($db->getDatabaseManager()),
+        );
     }
 }

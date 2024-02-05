@@ -43,14 +43,23 @@ class Validator
         array $rules,
         array $messages = [],
         array $attributes = [],
+        $returnHttpError = true,
     ) {
         $validator = self::make($data, $rules, $messages, $attributes);
 
-        if ($validator->fails() && Controller::has_curr()) {
-            return Controller::curr()->httpError(
-                422,
-                json_encode($validator->errors()->messages()),
-            );
+        if ($returnHttpError) {
+
+            if ($validator->fails() && Controller::has_curr()) {
+                return Controller::curr()->httpError(
+                    422,
+                    json_encode($validator->errors()->messages()),
+                );
+            }
+        } else {
+
+            if ($validator->fails()) {
+                return $validator->errors()->messages();
+            }
         }
 
         return $validator;

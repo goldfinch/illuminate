@@ -1,0 +1,16 @@
+<?php
+{{ namespace }}
+use Closure;
+use SilverStripe\Core\Environment;
+use SilverStripe\Control\Director;
+use Goldfinch\Illuminate\ValidationRule;
+
+class {{ class }}Rule implements ValidationRule
+{
+    public function validate(string $attribute, mixed $value, Closure $fail): void
+    {
+        // ..
+
+        // $fail('The :attribute invalid.');
+    }
+}

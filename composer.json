@@ -13,6 +13,7 @@
     "require": {
         "php": ">=8.0",
         "silverstripe/framework": "^5.0",
+        "goldfinch/taz": "^1.0",
         "illuminate/validation": "^10.22",
         "illuminate/translation": "^10.22",
         "illuminate/database": "^10.22",

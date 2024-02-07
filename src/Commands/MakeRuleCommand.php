@@ -3,7 +3,6 @@
 namespace Goldfinch\Illuminate\Commands;
 
 use Goldfinch\Taz\Console\GeneratorCommand;
-use Symfony\Component\Console\Command\Command;
 
 #[AsCommand(name: 'make:rule')]
 class MakeRuleCommand extends GeneratorCommand
@@ -19,11 +18,4 @@ class MakeRuleCommand extends GeneratorCommand
     protected $stub = './stubs/rule.stub';
 
     protected $prefix = 'Rule';
-
-    protected function execute($input, $output): int
-    {
-        parent::execute($input, $output);
-
-        return Command::SUCCESS;
-    }
 }

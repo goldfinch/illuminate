@@ -17,5 +17,5 @@ class MakeRuleCommand extends GeneratorCommand
 
     protected $stub = './stubs/rule.stub';
 
-    protected $prefix = 'Rule';
+    protected $suffix = 'Rule';
 }
